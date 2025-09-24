@@ -2,147 +2,17 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão de Alunos</title>
+  <title>Login</title>
   <link rel="stylesheet" href="/css/style.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <header class="header">
-      <h1><i class="fas fa-users"></i> Gestão de Alunos</h1>
-      <div class="stats">
-        <span class="stat-total">Total: <%= alunos.length %></span>
-        <span class="stat-pago">Pagos: <%= alunos.filter(a => a.pago).length %></span>
-        <span class="stat-pendente">Pendentes: <%= alunos.filter(a => !a.pago).length %></span>
-      </div>
-    </header>
-
-    <!-- Mensagens de feedback -->
-    <% if (success) { %>
-      <div class="alert alert-success">
-        <i class="fas fa-check-circle"></i> <%= success %>
-      </div>
-    <% } %>
-    
-    <% if (error) { %>
-      <div class="alert alert-error">
-        <i class="fas fa-exclamation-circle"></i> <%= error %>
-      </div>
-    <% } %>
-
-    <!-- Formulário de adição -->
-    <form method="POST" action="/alunos/add" class="form-add">
-      <h3><i class="fas fa-plus-circle"></i> Adicionar Novo Aluno</h3>
-      <div class="form-grid">
-        <input type="text" name="nome" placeholder="Nome completo" required 
-               minlength="2" maxlength="100" class="form-input">
-        <input type="text" name="contacto" placeholder="Contacto telefónico" 
-               required minlength="3" maxlength="20" class="form-input">
-        <button type="submit" class="btn-primary">
-          <i class="fas fa-user-plus"></i> Adicionar
-        </button>
-      </div>
+    <h2>Login Professor</h2>
+    <form method="POST" action="/login">
+      <input type="text" name="user" placeholder="Usuário" required>
+      <input type="password" name="pass" placeholder="Senha" required>
+      <button type="submit">Entrar</button>
     </form>
-
-    <!-- Ações em lote -->
-    <div class="batch-actions">
-      <a href="/alunos/pdf" target="_blank" class="btn-secondary">
-        <i class="fas fa-file-pdf"></i> Gerar PDF
-      </a>
-      <a href="/alunos/api" target="_blank" class="btn-secondary">
-        <i class="fas fa-download"></i> Exportar JSON
-      </a>
-    </div>
-
-    <!-- Lista de alunos -->
-    <div class="alunos-list">
-      <h3><i class="fas fa-list"></i> Lista de Alunos</h3>
-      
-      <% if (alunos.length === 0) { %>
-        <div class="empty-state">
-          <i class="fas fa-user-slash"></i>
-          <p>Nenhum aluno cadastrado</p>
-        </div>
-      <% } else { %>
-        <div class="table-responsive">
-          <table class="alunos-table">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Contacto</th>
-                <th>Estado</th>
-                <th>Dias desde Pagamento</th>
-                <th>Data de Início</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% alunos.forEach(aluno => { %>
-                <tr class="<%= aluno.pago ? 'pago' : 'nao-pago' %>">
-                  <td class="nome"><%= aluno.nome %></td>
-                  <td class="contacto"><%= aluno.contacto %></td>
-                  <td class="status">
-                    <% if (aluno.pago) { %>
-                      <span class="badge badge-success">
-                        <i class="fas fa-check"></i> Pago
-                      </span>
-                    <% } else { %>
-                      <span class="badge badge-danger">
-                        <i class="fas fa-times"></i> Pendente
-                      </span>
-                    <% } %>
-                  </td>
-                  <td class="dias-pagamento">
-                    <% if (aluno.pago && aluno.diasDesdePagamento !== null) { %>
-                      <%= aluno.diasDesdePagamento %> dias
-                    <% } else { %>
-                      -
-                    <% } %>
-                  </td>
-                  <td class="data-inicio">
-                    <%= new Date(aluno.dataInicio).toLocaleDateString('pt-PT') %>
-                  </td>
-                  <td class="actions">
-                    <% if (!aluno.pago) { %>
-                      <form method="POST" action="/alunos/pagar/<%= aluno.id %>" class="form-inline">
-                        <button type="submit" class="btn-success btn-sm" 
-                                title="Marcar como pago">
-                          <i class="fas fa-money-bill-wave"></i> Pagar
-                        </button>
-                      </form>
-                    <% } %>
-                    
-                    <form method="POST" action="/alunos/delete/<%= aluno.id %>" 
-                          class="form-inline" 
-                          onsubmit="return confirm('Tem certeza que deseja eliminar este aluno?')">
-                      <button type="submit" class="btn-danger btn-sm" 
-                              title="Eliminar aluno">
-                        <i class="fas fa-trash"></i> Eliminar
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-              <% }) %>
-            </tbody>
-          </table>
-        </div>
-      <% } %>
-    </div>
   </div>
-
-  <script>
-    // Auto-hide alerts after 5 seconds
-    document.addEventListener('DOMContentLoaded', function() {
-      const alerts = document.querySelectorAll('.alert');
-      alerts.forEach(alert => {
-        setTimeout(() => {
-          alert.style.opacity = '0';
-          setTimeout(() => alert.remove(), 300);
-        }, 5000);
-      });
-    });
-  </script>
 </body>
 </html>
