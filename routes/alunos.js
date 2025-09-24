@@ -26,7 +26,7 @@ router.post("/add", async (req, res) => {
 const PDFDocument = require("pdfkit");
 
 // rota para gerar o PDF
-router.get("/alunos/pdf", async (req, res) => {
+router.get("/pdf", async (req, res) => {
   try {
     const alunos = await githubService.getData(); // pega os alunos do JSON do GitHub
 
