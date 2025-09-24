@@ -21,28 +21,29 @@
 
 
     </form>
+<ul>
+  <% alunos.forEach(a => { %>
+    <li>
+      <strong><%= a.nome %></strong> - <%= a.contacto %> - 
+      <% if (a.pago) { %>
+        <span class="pago">✅ Pago</span>
+      <% } else { %>
+        <span class="nao-pago">❌ Não Pago</span>
+        <form method="POST" action="/alunos/pagar/<%= a.id %>" style="display:inline">
+          <button type="submit">Marcar como pago</button>
+        </form>
+      <% } %>
 
-    <ul>
-      <% alunos.forEach(a => { %>
-        <li>
-          <strong><%= a.nome %></strong> - <%= a.contacto %> - 
-          <% if (a.pago) { %>
-            <span class="pago">✅ Pago</span>
-          <% } else { %>
-            <span class="nao-pago">❌ Não Pago</span>
-            <form method="POST" action="/alunos/pagar/<%= a.id %>" style="display:inline">
-              <button type="submit">Marcar como pago</button>
-            </form>
-            <form action="/alunos/delete/<%= a.id %>" method="POST" style="display:inline;">
-  <button type="submit" style="background-color:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
-    🗑️ Eliminar
-  </button>
-</form>
+      <!-- Botão eliminar funciona sempre -->
+      <form action="/alunos/delete/<%= a.id %>" method="POST" style="display:inline;">
+        <button type="submit" style="background-color:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
+          🗑️ Eliminar
+        </button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
 
-          <% } %>
-        </li>
-      <% }) %>
-    </ul>
-  </div>
+   </div>
 </body>
 </html>
