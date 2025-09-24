@@ -4,66 +4,91 @@ const { getData, saveData } = require("../services/githubService");
 
 // rota para listar alunos
 router.get("/", async (req, res) => {
-  const { data, sha } = await getData();
+  try {
+    const { data, sha } = await getData();
 
-  // verifica se passou 30 dias dos pagamentos
-  const hoje = new Date();
-  data.forEach(aluno => {
-    if (aluno.pago && aluno.dataPagamento) {
-      const dataPag = new Date(aluno.dataPagamento);
-      const diffDias = Math.floor((hoje - dataPag) / (1000 * 60 * 60 * 24));
-      if (diffDias >= 30) {
-        aluno.pago = false;
-        delete aluno.dataPagamento; // remove data do pagamento
+    // verifica se passou 30 dias dos pagamentos
+    const hoje = new Date();
+    let houveAlteracao = false;
+
+    data.forEach(aluno => {
+      if (aluno.pago && aluno.dataPagamento) {
+        const dataPag = new Date(aluno.dataPagamento);
+        const diffDias = Math.floor((hoje - dataPag) / (1000 * 60 * 60 * 24));
+        if (diffDias >= 30) {
+          aluno.pago = false;
+          delete aluno.dataPagamento; // remove data do pagamento
+          houveAlteracao = true;
+        }
       }
+    });
+
+    // salva só se houve alterações
+    if (houveAlteracao) {
+      await saveData(data, sha);
     }
-  });
 
-  // salva se houve alterações
-  await saveData(data, sha);
-
-  res.render("alunos", { alunos: data });
+    res.render("alunos", { alunos: data });
+  } catch (err) {
+    console.error("Erro ao listar alunos:", err);
+    res.status(500).send("Erro ao carregar alunos");
+  }
 });
 
 // adicionar aluno
 router.post("/add", async (req, res) => {
-  const { data, sha } = await getData();
+  try {
+    const { data, sha } = await getData();
 
-  const novoAluno = {
-    id: Date.now(),
-    nome: req.body.nome,
-    contacto: req.body.contacto,
-    pago: false,
-    dataInicio: new Date().toISOString()
-  };
+    const novoAluno = {
+      id: Date.now(),
+      nome: req.body.nome || "Sem nome",
+      contacto: req.body.contacto || "Sem contacto",
+      pago: false,
+      dataInicio: new Date().toISOString()
+    };
 
-  data.push(novoAluno);
-  await saveData(data, sha);
+    data.push(novoAluno);
+    await saveData(data, sha);
 
-  res.redirect("/alunos");
+    res.redirect("/alunos");
+  } catch (err) {
+    console.error("Erro ao adicionar aluno:", err);
+    res.status(500).send("Erro ao adicionar aluno");
+  }
 });
+
 // eliminar aluno
 router.post("/delete/:id", async (req, res) => {
-  const { data, sha } = await getData();
+  try {
+    const { data, sha } = await getData();
+    const novosAlunos = data.filter(a => a.id != req.params.id);
 
-  const novosAlunos = data.filter(a => a.id != req.params.id);
-
-  await saveData(novosAlunos, sha);
-  res.redirect("/alunos");
+    await saveData(novosAlunos, sha);
+    res.redirect("/alunos");
+  } catch (err) {
+    console.error("Erro ao eliminar aluno:", err);
+    res.status(500).send("Erro ao eliminar aluno");
+  }
 });
 
 // marcar pagamento
 router.post("/pagar/:id", async (req, res) => {
-  const { data, sha } = await getData();
+  try {
+    const { data, sha } = await getData();
+    const aluno = data.find(a => a.id == req.params.id);
 
-  const aluno = data.find(a => a.id == req.params.id);
-  if (aluno) {
-    aluno.pago = true;
-    aluno.dataPagamento = new Date().toISOString(); // salva data do pagamento
+    if (aluno) {
+      aluno.pago = true;
+      aluno.dataPagamento = new Date().toISOString(); // salva data do pagamento
+      await saveData(data, sha);
+    }
+
+    res.redirect("/alunos");
+  } catch (err) {
+    console.error("Erro ao marcar pagamento:", err);
+    res.status(500).send("Erro ao marcar pagamento");
   }
-
-  await saveData(data, sha);
-  res.redirect("/alunos");
 });
 
 module.exports = router;
