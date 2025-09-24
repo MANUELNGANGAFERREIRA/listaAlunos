@@ -23,6 +23,36 @@ router.post("/add", async (req, res) => {
 
   res.redirect("/alunos");
 });
+const PDFDocument = require("pdfkit");
+
+// rota para gerar o PDF
+router.get("/alunos/pdf", async (req, res) => {
+  try {
+    const alunos = await githubService.getData(); // pega os alunos do JSON do GitHub
+
+    // cria o PDF
+    const doc = new PDFDocument();
+
+    // configura headers pra download
+    res.setHeader("Content-disposition", "attachment; filename=alunos.pdf");
+    res.setHeader("Content-type", "application/pdf");
+
+    doc.pipe(res);
+
+    doc.fontSize(18).text("Lista de Alunos e Pagamentos", { align: "center" });
+    doc.moveDown();
+
+    alunos.forEach((aluno, i) => {
+      doc.fontSize(12).text(
+        `${i + 1}. ${aluno.nome} - Pagamento: ${aluno.pagamento || "Pendente"}`
+      );
+    });
+
+    doc.end();
+  } catch (err) {
+    res.status(500).send("Erro ao gerar PDF");
+  }
+});
 
 router.post("/pagar/:id", async (req, res) => {
   const { data, sha } = await getData();
