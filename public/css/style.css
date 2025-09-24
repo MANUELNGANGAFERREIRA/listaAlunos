@@ -1,44 +1,263 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f9;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
 }
 
 .container {
-  width: 80%;
-  margin: auto;
-  margin-top: 40px;
-  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #ccc;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  overflow: hidden;
 }
 
-h2 {
+.header {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 2.5em;
+  margin-bottom: 15px;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-total, .stat-pago, .stat-pendente {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.stat-total { background: #3498db; }
+.stat-pago { background: #27ae60; }
+.stat-pendente { background: #e74c3c; }
+
+.alert {
+  padding: 15px;
+  margin: 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.3s ease;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.form-add {
+  padding: 30px;
+  background: #f8f9fa;
+  margin: 20px;
+  border-radius: 10px;
+}
+
+.form-add h3 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 15px;
+  align-items: end;
+}
+
+.form-input {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.batch-actions {
+  padding: 0 30px 20px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-primary, .btn-secondary, .btn-success, .btn-danger {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: #95a5a6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+.btn-success {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.alunos-list {
+  padding: 30px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #7f8c8d;
+}
+
+.empty-state i {
+  font-size: 4em;
   margin-bottom: 20px;
 }
 
-form input, form button {
-  padding: 10px;
-  margin: 5px;
+.table-responsive {
+  overflow-x: auto;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+.alunos-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-li {
-  margin: 8px 0;
+.alunos-table th,
+.alunos-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
 }
 
-.pago {
-  color: green;
+.alunos-table th {
+  background: #34495e;
+  color: white;
+  font-weight: 600;
+}
+
+.alunos-table tr:hover {
+  background: #f8f9fa;
+}
+
+.alunos-table tr.pago {
+  background: #d5f4e6;
+}
+
+.alunos-table tr.nao-pago {
+  background: #fadbd8;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
   font-weight: bold;
 }
 
-.nao-pago {
-  color: red;
-  font-weight: bold;
+.badge-success {
+  background: #27ae60;
+  color: white;
+}
+
+.badge-danger {
+  background: #e74c3c;
+  color: white;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.form-inline {
+  display: inline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .alunos-table {
+    font-size: 14px;
+  }
+  
+  .alunos-table th,
+  .alunos-table td {
+    padding: 8px 4px;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
 }
