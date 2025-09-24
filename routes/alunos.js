@@ -42,6 +42,15 @@ router.post("/add", async (req, res) => {
 
   res.redirect("/alunos");
 });
+// eliminar aluno
+router.post("/delete/:id", async (req, res) => {
+  const { data, sha } = await getData();
+
+  const novosAlunos = data.filter(a => a.id != req.params.id);
+
+  await saveData(novosAlunos, sha);
+  res.redirect("/alunos");
+});
 
 // marcar pagamento
 router.post("/pagar/:id", async (req, res) => {
