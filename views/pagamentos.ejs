@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatório de Pagamentos</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Relatório de Pagamentos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Aluno</th>
+          <th>Contacto</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% alunos.forEach(a => { %>
+          <tr>
+            <td><%= a.nome %></td>
+            <td><%= a.contacto %></td>
+            <td>
+              <% if (a.pago) { %>
+                ✅ Pago
+              <% } else { %>
+                ❌ Não Pago
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

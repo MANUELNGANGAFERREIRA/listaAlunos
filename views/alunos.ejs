@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Alunos</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Lista de Alunos</h2>
+
+    <form method="POST" action="/alunos/add" class="form-inline">
+      <input type="text" name="nome" placeholder="Nome" required>
+      <input type="text" name="contacto" placeholder="Contacto" required>
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <ul>
+      <% alunos.forEach(a => { %>
+        <li>
+          <strong><%= a.nome %></strong> - <%= a.contacto %> - 
+          <% if (a.pago) { %>
+            <span class="pago">✅ Pago</span>
+          <% } else { %>
+            <span class="nao-pago">❌ Não Pago</span>
+            <form method="POST" action="/alunos/pagar/<%= a.id %>" style="display:inline">
+              <button type="submit">Marcar como pago</button>
+            </form>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f9;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+  margin-top: 40px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ccc;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+form input, form button {
+  padding: 10px;
+  margin: 5px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 8px 0;
+}
+
+.pago {
+  color: green;
+  font-weight: bold;
+}
+
+.nao-pago {
+  color: red;
+  font-weight: bold;
+}
